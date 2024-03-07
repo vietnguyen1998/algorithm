@@ -1,23 +1,23 @@
-//https://leetcode.com/problems/number-of-islands/
-
+//https://leetcode.com/problems/max-area-of-island/description/
 /**
- * @param {character[][]} grid
+ * @param {number[][]} grid
  * @return {number}
  */
-var numIslands = function (grid) {
+var maxAreaOfIsland = function (grid) {
     let m = grid.length
     let n = grid[0].length
     visited = new Array(m).fill().map(() => [])
-    let count = 0
+    let result = []
     for (let i = 0; i < m; i++) {
         for (let j = 0; j < n; j++) {
             if (!visited[i][j] && grid[i][j] == 1) {
+                count = 1
                 dfs(grid, i, j)
-                count++
+                result.push(count)
             }
         }
     }
-    return count
+    return result.length > 0 ? Math.max(...result) : 0
 };
 
 let dx = [0, 1, 0, -1]
@@ -29,13 +29,8 @@ var dfs = function (grid, i, j) {
         let x = i + dx[k]
         let y = j + dy[k]
         if (x >= 0 && y >= 0 && y < grid[0].length && x < grid.length && !visited[x][y] && grid[x][y] == 1) {
+            count++
             dfs(grid, x, y)
         }
     }
 }
-
-let grid = [
-    ["1","1","0","0","0"],
-    ["1","1","0","0","0"],]
-let a = numIslands(grid)
-''
