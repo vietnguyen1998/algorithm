@@ -10,36 +10,40 @@ function TreeNode(val, left, right) {
  * @return {TreeNode}
  */
 var deleteNode = function (root, key) {
-    if (!root) return null;
-
-    if (root.val > key) {
-        root.left = deleteNode(root.left, key);
-        return root;
-    } else if (root.val < key) {
-        root.right = deleteNode(root.right, key);
-        return root;
+    if (!root) return null
+    // bs
+    // key > root value => go right
+    if (key > root.val) {
+        root.right = deleteNode(root.right, key)
+        return root
+    // key < root value => go left
+    } else if (key < root.val) {
+        root.left = deleteNode(root.left, key)
+        return root
+    // key = root value
     } else {
-        // If found a node
-        if (root.right !== null && root.left !== null) {
-            let curRoot = root.right;
-            while (curRoot.left) {
-                curRoot = curRoot.left
+        // left & right => swap value & delete leaf
+        if (root.left && root.right) {
+            let leafNode = root.right
+            while (leafNode.left != null) {
+                leafNode = leafNode.left
             }
-            const rightMin = curRoot.val;
-            root.val = rightMin;
-            root.right = deleteNode(root.right, rightMin);
-            return root;
-        } else if (root.left !== null) {
-            return root.left;
-        } else if (root.right !== null) {
-            return root.right
-        } else return null
+            let leafValue = leafNode.val
+            root.val = leafValue
+            root.right = deleteNode(root.right, leafValue)
+            return root
+        }
+        // only 1 leaf => return leaf
+        else if (root.left) { return root.left }
+        else if (root.right) { return root.right }
+        // only 0 leaf => return null
+        else { return null }
     }
 };
 
-var root = new TreeNode(16, 
-    new TreeNode(6, 
-        new TreeNode(2), 
-        new TreeNode(8,new TreeNode(7), new TreeNode(9))), 
-    new TreeNode(26,null, new TreeNode(7)))
-deleteNode(root, 6)
+var root = new TreeNode(50, 
+    new TreeNode(30, 
+        null, 
+        new TreeNode(40)), 
+    new TreeNode(70,new TreeNode(60), new TreeNode(80)))
+deleteNode(root, 50)
