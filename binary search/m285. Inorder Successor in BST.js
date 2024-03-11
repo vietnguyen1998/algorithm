@@ -32,5 +32,5 @@ var inorderSuccessor2 = function (root, p, inOrderSuccessor= null) {
 
 var root = new TreeNode(5, new TreeNode(3, new TreeNode(2), new TreeNode(1)), new TreeNode(6))
 var node = new TreeNode(5)
-var a = inorderSuccessor2(root, node)
+var a = inorderSuccessor(root, node)
 ''
