@@ -11,13 +11,9 @@ var searchMatrix = function (matrix, target) {
     let col = n - 1
     while (row < m && col >= 0) {
         let value = matrix[row][col]
-        if (value > target) {
-            col--
-        } else if (value < target) {
-            row++
-        } else {
-            return true
-        }
+        if (value > target) col--
+        else if (value < target) row++
+        else return true
     }
     return false
 };
