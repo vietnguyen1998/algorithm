@@ -6,39 +6,47 @@
  * @param {number} k
  * @return {number}
  */
-var findCheapestPrice = function(n, flights, src, dst, k) {
-    const adj = new Map();
-    const visited = new Array(n).fill(Number.MAX_VALUE);
-    visited[src] = 0;
+var findCheapestPrice = function (n, flights, src, dst, k) {
+    let result = -1
 
-    for (const [from, to, price] of flights) {
-        if (!adj.has(from)) {
-            adj.set(from, []);
-        }
-        adj.get(from).push([to, price]);
+    //convert
+    let adjList = {}
+    for (const [u, v, w] of flights) {
+        if (!adjList[u]) adjList[u] = {}
+        adjList[u][v] = w
     }
 
-    const queue = [[src, 0]];
-    k++;
+    // init
+    let nodes = Array.from({ length: n }, (_, i) => i)
+    let distance = {}
+    nodes.map(e => distance[e] = Infinity)
+    distance[src] = 0
+    let visited = new Map()
 
-    while (k-- > 0 && queue.length > 0) {
-        const size = queue.length;
+    // dij
+    let contains = [[src, 0]]
+    while (k >= 0 && contains.length > 0) {
+        let size = contains.length
+        contains.sort(([a, w1], [b, w2]) => w1-w2)
         for (let i = 0; i < size; i++) {
-            const [currNode, currPrice] = queue.shift();
-            if (adj.has(currNode)) {
-                for (const [nextNode, nextPrice] of adj.get(currNode)) {
-                    const newPrice = currPrice + nextPrice;
-                    if (newPrice < visited[nextNode]) {
-                        visited[nextNode] = newPrice;
-                        queue.push([nextNode, newPrice]);
+            let [u, w] = contains.shift()
+            visited.set(u.toString(), true)
+            for (let item in adjList[u]) {
+                if (!visited.has(item)) {
+                    let newDistance = w + adjList[u][item]
+                    if (newDistance < distance[item]) {
+                        distance[item] = newDistance
                     }
+                    contains.push([item, distance[item]])
                 }
             }
         }
+        k--
     }
+    return result[dst]
+}
 
-    return visited[dst] === Number.MAX_VALUE ? -1 : visited[dst];
-};
-
-let n = 4, flights = [[0,1,1],[0,2,5],[1,2,1],[2,3,1]], src = 0, dst = 3, k = 1
-findCheapestPrice(n, flights,src,dst,k)
+let n = 5
+let flights = [[0, 1, 5], [1, 2, 5], [0, 3, 2], [3, 1, 2], [1, 4, 1], [4, 2, 1]]
+let src = 0, dst = 2, k = 2
+findCheapestPrice(n, flights, src, dst, k)
