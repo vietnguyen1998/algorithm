@@ -1,3 +1,4 @@
+//https://leetcode.com/problems/satisfiability-of-equality-equations/
 /**
  * @param {string[]} equations
  * @return {boolean}
@@ -24,6 +25,7 @@ var equationsPossible = function (equations) {
     }
     return true
 };
+
 
 class DisjointSets {
     parents = [];
@@ -53,6 +55,3 @@ class DisjointSets {
         return a;
     }
 }
-
-let equations = ["c==c","b==d","x!=z"]
-equationsPossible(equations)
