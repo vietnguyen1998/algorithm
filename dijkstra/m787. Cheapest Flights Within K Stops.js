@@ -1,3 +1,4 @@
+//https://leetcode.com/problems/cheapest-flights-within-k-stops/
 /**
  * @param {number} n
  * @param {number[][]} flights
@@ -7,7 +8,7 @@
  * @return {number}
  */
 var findCheapestPrice = function (n, flights, src, dst, k) {
-    let result = -1
+    let result = Infinity
 
     //convert
     let adjList = {}
@@ -17,36 +18,30 @@ var findCheapestPrice = function (n, flights, src, dst, k) {
     }
 
     // init
-    let nodes = Array.from({ length: n }, (_, i) => i)
+    let travel = [[src, 0]]
     let distance = {}
-    nodes.map(e => distance[e] = Infinity)
+    Array.from({length: n}, (_, i) => distance[i] = Infinity)
     distance[src] = 0
-    let visited = new Map()
 
     // dij
-    let contains = [[src, 0]]
-    while (k >= 0 && contains.length > 0) {
-        let size = contains.length
-        contains.sort(([a, w1], [b, w2]) => w1-w2)
+    k++
+    while (k >= 0 && travel.length > 0) {
+        let size = travel.length
         for (let i = 0; i < size; i++) {
-            let [u, w] = contains.shift()
-            visited.set(u.toString(), true)
+            let [u, w] = travel.shift()
+            if (u == dst) result = Math.min(result, w)
             for (let item in adjList[u]) {
-                if (!visited.has(item)) {
-                    let newDistance = w + adjList[u][item]
-                    if (newDistance < distance[item]) {
-                        distance[item] = newDistance
-                    }
-                    contains.push([item, distance[item]])
+                let newDistance = w + adjList[u][item]
+                if(newDistance < distance[item]){
+                    distance[item] = newDistance
+                    travel.push([item, newDistance])
                 }
             }
         }
         k--
     }
-    return result[dst]
+    return result == Infinity ? -1 : result
 }
 
-let n = 5
-let flights = [[0, 1, 5], [1, 2, 5], [0, 3, 2], [3, 1, 2], [1, 4, 1], [4, 2, 1]]
-let src = 0, dst = 2, k = 2
+let n = 5, flights = [[0, 1, 5], [1, 2, 5], [0, 3, 2], [3, 1, 2], [1, 4, 1], [4, 2, 1]], src = 0, dst = 2, k = 2
 findCheapestPrice(n, flights, src, dst, k)

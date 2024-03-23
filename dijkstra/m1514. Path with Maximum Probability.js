@@ -1,3 +1,9 @@
+const {
+    PriorityQueue,
+    MinPriorityQueue,
+    MaxPriorityQueue,
+} = require('@datastructures-js/priority-queue');
+
 /**
  * @param {number} n
  * @param {number[][]} edges
@@ -7,7 +13,7 @@
  * @return {number}
  */
 var maxProbability = function (n, edges, succProb, start_node, end_node) {
-    let result = -1
+    let result = 0
 
     // convert
     let adjList = {}
@@ -20,32 +26,27 @@ var maxProbability = function (n, edges, succProb, start_node, end_node) {
     }
 
     // init 
-    let nodes = Array.from({ length: n }, (_, i) => i.toString())
+    let queue = new MaxPriorityQueue({ compare: (a, b) => b[1] - a[1] })
+    queue.enqueue([start_node, 1])
     let distance = {}
-    nodes.map((e) => distance[e] = -Infinity)
+    Array.from({ length: n }, (_, i) => distance[i] = -Infinity)
     distance[start_node] = 1
     let visited = new Map()
 
     // dif
-    while (nodes.length > 0) {
-        let closest = nodes.shift()
-        visited.set(closest, true)
+    while (queue.size() > 0) {
+        let [closest, w] = queue.dequeue()
+        visited.set(closest.toString(), true)
         for (let item in adjList[closest]) {
-            let a = visited.has(item)
             if (!visited.has(item)) {
-                let newDistance = distance[closest] * adjList[closest][item]
-                console.log(newDistance)
+                let newDistance = w * adjList[closest][item]
                 if (newDistance > distance[item]) {
                     distance[item] = newDistance
+                    if (item == end_node) result = Math.max(result, newDistance)
+                    queue.enqueue([item, newDistance])
                 }
             }
         }
     }
-    result = distance[end_node]
     return result
 };
-
-let n = 5, edges = [[1,4],[2,4],[0,4],[0,3],[0,2],[2,3]], succProb = [0.37,0.17,0.93,0.23,0.39,0.04], start = 3, end = 2
-maxProbability(n, edges, succProb, start, end)
-
-(n+m)(nlogn)
