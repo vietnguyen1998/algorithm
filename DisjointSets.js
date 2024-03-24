@@ -1,37 +1,38 @@
 class DisjointSets {
-    parents = [];
-    weights = [];
-
     constructor(n) {
-        this.parents = new Array(n);
-        this.weights = new Array(n);
+        this.rank = new Array(n);
+        this.parent = new Array(n);
+        this.n = n;
+        this.makeSet();
+    }
 
-        for (let i = 0; i < n; i++) {
-            this.parents[i] = i;
-            this.weights[i] = i;
+    makeSet() {
+        for (let i = 0; i < this.n; i++) {
+            this.parent[i] = i;
+            this.rank[i] = 0;
         }
     }
 
-    Union(a, b) {
-        let rootA = this.Find(a);
-        let rootB = this.Find(b);
+    Find(x) {
+        if (this.parent[x] !== x) {
+            this.parent[x] = this.Find(this.parent[x]);
+        }
+        return this.parent[x];
+    }
 
-        if (this.weights[rootA] > this.weights[rootB]) {
-            this.parents[rootB] = rootA;
-            this.weights[rootA] += this.weights[rootB];
+    Union(x, y) {
+        let xset = this.Find(x);
+        let yset = this.Find(y);
+
+        if (xset === yset) return;
+
+        if (this.rank[xset] < this.rank[yset]) {
+            this.parent[xset] = yset;
+        } else if (this.rank[xset] > this.rank[yset]) {
+            this.parent[yset] = xset;
         } else {
-            this.parents[rootA] = rootB;
-            this.weights[rootB] += this.weights[rootA];
+            this.parent[yset] = xset;
+            this.rank[xset] = this.rank[xset] + 1;
         }
-    }
-
-    Find(a) {
-        while (a !== this.parents[a]) {
-            a = this.parents[this.parents[a]];
-        }
-        return a;
     }
 }
-
-const A = 'a'.charCodeAt(0);
-''

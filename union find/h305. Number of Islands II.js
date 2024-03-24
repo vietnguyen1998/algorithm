@@ -1,3 +1,4 @@
+//https://leetcode.com/problems/number-of-islands-ii/
 /**
  * @param {number} m
  * @param {number} n
@@ -16,14 +17,14 @@ var numIslands2 = function (m, n, positions) {
     var count = 0
     for (let i = 0; i < positions.length; i++) {
         let [x, y] = positions[i]
-        let index = x * m + y
+        let index = x * n + y
         if (!map.has(index)) count++
         map.set(index, true)
         for (let j = 0; j < 4; j++) {
             let x1 = dx[j] + x
             let y1 = dy[j] + y
             if (x1 >= 0 && y1 >= 0 && x1 < m && y1 < n) {
-                let index1 = x1 * m + y1
+                let index1 = x1 * n + y1
                 if (set.Find(index) != set.Find(index1) && map.has(index1)) {
                     set.Union(index, index1)
                     count--
@@ -69,7 +70,3 @@ class DisjointSets {
         return a;
     }
 }
-
-
-let m = 3, n = 3, positions = [[0, 0], [0, 1], [1, 2], [2, 1]]
-numIslands2(m, n, positions)
