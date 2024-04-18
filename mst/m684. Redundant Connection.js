@@ -1,8 +1,21 @@
+//https://leetcode.com/problems/redundant-connection/
 /**
- * @param {number} n
- * @param {number[][]} connections
- * @return {number}
+ * @param {number[][]} edges
+ * @return {number[]}
  */
+var findRedundantConnection = function (edges) {
+    let n = edges.length
+    let set = new DisjointSets(n)
+    for (let i = 0; i < n; i++) {
+        let u = edges[i][0] - 1
+        let v = edges[i][1] - 1
+        if (set.Find(u) != set.Find(v))
+            set.Union(u, v)
+        else
+            return edges[i]
+    }
+};
+
 class DisjointSets {
     constructor(n) {
         this.rank = new Array(n);
@@ -41,27 +54,3 @@ class DisjointSets {
         }
     }
 }
-var minimumCost = function (n, connections) {
-    connections.sort((a, b) => a[2] - b[2])
-    console.log(connections)
-    let set = new DisjointSets(n)
-    let res = 0
-    let count = 0
-    console.log(n)
-    for (let i = 0; i < n; i++) {
-        console.log(n)
-        let x = connections[i][0] - 1
-        let y = connections[i][1] - 1
-        let cost = connections[i][2]
-        if (set.Find(x) != set.Find(y)) {
-            res += cost
-            count++
-            set.Union(x, y)
-        }
-    }
-    return res
-};
-
-let n = 3, connections = [[1,2,5],[1,3,6],[2,3,1]]
-minimumCost(n, connections)
-

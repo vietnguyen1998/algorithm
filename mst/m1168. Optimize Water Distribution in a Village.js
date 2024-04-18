@@ -1,8 +1,31 @@
+//https://leetcode.com/problems/optimize-water-distribution-in-a-village/
 /**
  * @param {number} n
- * @param {number[][]} connections
+ * @param {number[]} wells
+ * @param {number[][]} pipes
  * @return {number}
  */
+var minCostToSupplyWater = function (n, wells, pipes) {
+    // addition a well connect all houses
+    for (let i = 0; i < n; i++) {
+        pipes.push([n + 1, i + 1, wells[i]])
+    }
+    pipes.sort((a, b) => a[2] - b[2])
+    // mst
+    let set = new DisjointSets(n + 1)
+    let result = 0
+    for (let i = 0; i < pipes.length; i++) {
+        let u = pipes[i][0] - 1
+        let v = pipes[i][1] - 1
+        let w = pipes[i][2]
+        if (set.Find(u) != set.Find(v)) {
+            result += w
+            set.Union(u, v)
+        }
+    }
+    return result;
+};
+
 class DisjointSets {
     constructor(n) {
         this.rank = new Array(n);
@@ -41,27 +64,3 @@ class DisjointSets {
         }
     }
 }
-var minimumCost = function (n, connections) {
-    connections.sort((a, b) => a[2] - b[2])
-    console.log(connections)
-    let set = new DisjointSets(n)
-    let res = 0
-    let count = 0
-    console.log(n)
-    for (let i = 0; i < n; i++) {
-        console.log(n)
-        let x = connections[i][0] - 1
-        let y = connections[i][1] - 1
-        let cost = connections[i][2]
-        if (set.Find(x) != set.Find(y)) {
-            res += cost
-            count++
-            set.Union(x, y)
-        }
-    }
-    return res
-};
-
-let n = 3, connections = [[1,2,5],[1,3,6],[2,3,1]]
-minimumCost(n, connections)
-

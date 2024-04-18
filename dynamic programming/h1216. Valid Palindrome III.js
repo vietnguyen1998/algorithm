@@ -1,15 +1,10 @@
-//https://leetcode.com/problems/longest-palindromic-subsequence/
+//https://leetcode.com/problems/valid-palindrome-iii/
 /**
  * @param {string} s
- * @return {number}
+ * @param {number} k
+ * @return {boolean}
  */
-var longestPalindromeSubseq = function (s) {
-    // dp[i][j] = the longest palindromic subsequence's length
-    // if(s[i]==s[j]) dp[i][j] = dp[i+1][j-1] + 2
-    // else dp[i][j] = max(dp[i+1][j], dp[i][j-1])
-    // f[i][i] = 1
-    // f[i][i+1] = s[i] == s[i+1] ? 2 : 1
-
+var isValidPalindrome = function(s, k) {
     let n = s.length
     let dp = Array.from({ length: n }, () => Array.from({ length: n }, () => 0))
     for (let i = 0; i < n; i++) {
@@ -28,5 +23,5 @@ var longestPalindromeSubseq = function (s) {
             }
         }
     }
-    return dp[0][n - 1]
+    return n - dp[0][n - 1] <= k
 };
