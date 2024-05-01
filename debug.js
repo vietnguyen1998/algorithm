@@ -1,4 +1,5 @@
-let arr = ["a", "b", "c"]
+let arr = 3
+arr = Math.pow(2, 3)
 
 
-console.log(arr.)
+console.log(arr)

@@ -1,14 +1,11 @@
-// https://leetcode.com/problems/range-sum-query-immutable/
+//https://leetcode.com/problems/range-sum-query-immutable/
 /**
  * @param {number[]} nums
  */
 var NumArray = function (nums) {
-    // calculation prefix sum
-    prefix = [0]
-    for (let i = 0; i < nums.length; i++) {
-        prefix[i + 1] = nums[i] + prefix[i]
-    }
-    console.log(prefix)
+    this.prefix = Array.from({ length: nums.length + 1 }, () => 0)
+    for (let i = 0; i < nums.length; i++) 
+        this.prefix[i + 1] = this.prefix[i] + nums[i]
 };
 
 /** 
@@ -17,7 +14,7 @@ var NumArray = function (nums) {
  * @return {number}
  */
 NumArray.prototype.sumRange = function (left, right) {
-    return prefix[right + 1] - prefix[left]
+    return this.prefix[right + 1] - this.prefix[left]
 };
 
 /** 
